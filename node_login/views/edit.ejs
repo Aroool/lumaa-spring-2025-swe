@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+    <style>
+        /* Your existing CSS styles */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/users/dashboard" class="logout-btn">Back to Dashboard</a>
+        <h1>Edit Task</h1>
+
+        <form id="editTaskForm">
+            <input type="text" name="title" placeholder="Task Title" value="<%= task.title %>" required />
+            <textarea name="description" placeholder="Task Description"><%= task.description %></textarea>
+            <label>
+                <input type="checkbox" name="is_complete" class="task-complete" <%= task.is_complete ? 'checked' : '' %> />
+                Mark as Completed
+            </label>
+            <input type="hidden" name="taskId" value="<%= task.id %>" />
+            <input type="submit" value="Update Task" class="button-primary" />
+        </form>
+    </div>
+
+    <script>
+    document.getElementById('editTaskForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const taskData = {
+            title: formData.get('title'),
+            description: formData.get('description'),
+            is_complete: formData.get('is_complete') === 'on',
+            taskId: formData.get('taskId')
+        };
+
+        console.log('Form Data:', taskData);
+
+        fetch(`/tasks/${taskData.taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: taskData.title,
+                description: taskData.description,
+                is_complete: taskData.is_complete
+            })
+        })
+        .then(response => response.json())
+        .then(updatedTask => {
+            alert('Task updated successfully!');
+            window.location.href = '/users/dashboard';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to update task');
+        });
+    });
+</script>
+
+</body>
+</html>
