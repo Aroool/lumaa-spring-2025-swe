@@ -1,119 +1,106 @@
 # Full-Stack Coding Challenge
 
-**Deadline**: Sunday, Feb 23th 11:59 pm PST
+# Task Management Application
 
----
+This is a Task Management application built with Node.js, Express, PostgreSQL, and EJS for server-side rendering. The application allows users to register, log in, and manage their tasks (create, read, update, and delete).
 
-## Overview
+**Features:**
 
-Create a “Task Management” application with **React + TypeScript** (frontend), **Node.js** (or **Nest.js**) (backend), and **PostgreSQL** (database). The application should:
+* User registration and login with Passport.js and bcrypt for password hashing.
+* CRUD operations for tasks.
+* Protected routes that require authentication.
+* Simple and intuitive UI using EJS templates and Skeleton CSS.
 
-1. **Register** (sign up) and **Log in** (sign in) users.
-2. After logging in, allow users to:
-   - **View a list of tasks**.
-   - **Create a new task**.
-   - **Update an existing task** (e.g., mark complete, edit).
-   - **Delete a task**.
+**Technologies Used:**
+* Backend: Node.js, Express, PostgreSQL
+* Authentication: Passport.js, bcrypt
+* Frontend: EJS (Embedded JavaScript templates)
+* Styling: Skeleton CSS
+* Database: PostgreSQL
 
-Focus on **correctness**, **functionality**, and **code clarity** rather than visual design.  
-This challenge is intended to be completed within ~3 hours, so keep solutions minimal yet functional.
 
----
+node_login/
+├── dbConfig.js          # Database configuration
+├── passportConfig.js    # Passport.js configuration
+├── server.js            # Main server file
+├── views/
+│   ├── dashboard.ejs    # Dashboard page (task management)
+│   ├── edit.ejs         # Edit task page
+│   ├── index.ejs        # Home page
+│   ├── login.ejs        # Login page
+│   ├── register.ejs     # Registration page
+├── .env                 # Environment variables
+├── package.json         # Node.js dependencies
+├── README.md            # Project documentation
 
-## Requirements
+**Setup Instructions**
+Prerequisites
+  1. Node.js (v14 or higher)
+  2. PostgreSQL (v12 or higher)
+  3. npm or yarn
 
-### 1. Authentication
+**Step 1:** Clone the Repository
 
-- **User Model**:
-  - `id`: Primary key
-  - `username`: Unique string
-  - `password`: Hashed string
-- **Endpoints**:
-  - `POST /auth/register` – Create a new user
-  - `POST /auth/login` – Login user, return a token (e.g., JWT)
-- **Secure the Tasks Routes**: Only authenticated users can perform task operations.  
-  - **Password Hashing**: Use `bcrypt` or another hashing library to store passwords securely.
-  - **Token Verification**: Verify the token (JWT) on each request to protected routes.
+**Step 2:** Set Up the Database
+  1. Create a PostgreSQL database named nodelogin (or any name you prefer).
+  2. Run the following SQL commands to create the necessary tables:
+CREATE TABLE users
+    (id BIGSERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    email VARCHAR(200) NOT NULL,
+    password VARCHAR(200) NOT NULL,
+    UNIQUE (email)
+);
 
-### 2. Backend (Node.js or Nest.js)
+CREATE TABLE tasks
+    ( id SERIAL PRIMARY KEY, 
+    title VARCHAR(255) NOT NULL, 
+    description TEXT, 
+    is_complete BOOLEAN DEFAULT FALSE, 
+    user_id INT REFERENCES users(id) ON DELETE CASCADE, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
-- **Tasks CRUD**:  
-  - `GET /tasks` – Retrieve a list of tasks (optionally filtered by user).  
-  - `POST /tasks` – Create a new task.  
-  - `PUT /tasks/:id` – Update a task (e.g., mark as complete, edit text).  
-  - `DELETE /tasks/:id` – Delete a task.
-- **Task Model**:
-  - `id`: Primary key
-  - `title`: string
-  - `description`: string (optional)
-  - `isComplete`: boolean (default `false`)
-  - _(Optional)_ `userId` to link tasks to the user who created them
-- **Database**: PostgreSQL
-  - Provide instructions/migrations to set up:
-    - `users` table (with hashed passwords)
-    - `tasks` table
-- **Setup**:
-  - `npm install` to install dependencies
-  - `npm run start` (or `npm run dev`) to run the server
-  - Document any environment variables (e.g., database connection string, JWT secret)
+**Step 3:** Configure Environment Variables
+  1. Create a .env file in the root directory and add the following variables:
+    DB_USER=your_db_username
+    DB_PASSWORD=your_db_password
+    DB_HOST=localhost
+    DB_PORT=5432
+    DB_DATABASE=nodelogin
+Replace your_db_username, your_db_password with your actual values.
 
-### 3. Frontend (React + TypeScript)
+**Step 4:** Install Dependencies
+  Run the following command to install the required dependencies:
+    **npm install**
+    
+**Step 5:** Run the Application
+  Start the server using the following command:
+    **npm run dev**
+  The application will be running at http://localhost:4000
 
-- **Login / Register**:
-  - Simple forms for **Register** and **Login**.
-  - Store JWT (e.g., in `localStorage`) upon successful login.
-  - If not authenticated, the user should not see the tasks page.
-- **Tasks Page**:
-  - Fetch tasks from `GET /tasks` (including auth token in headers).
-  - Display the list of tasks.
-  - Form to create a new task (`POST /tasks`).
-  - Buttons/fields to update a task (`PUT /tasks/:id`).
-  - Button to delete a task (`DELETE /tasks/:id`).
-- **Navigation**:
-  - Show `Login`/`Register` if not authenticated.
-  - Show `Logout` if authenticated.
-- **Setup**:
-  - `npm install` then `npm start` (or `npm run dev`) to run.
-  - Document how to point the frontend at the backend (e.g., `.env` file, base URL).
+**Usage**
 
----
+_Register a new user:_
+  * Navigate to http://localhost:4000/users/register and fill in the form to create a new account.
 
-## Deliverables
+_Log in:_
+  * Use your credentials to log in at http://localhost:4000/users/login. Upon successful login, you will be redirected to the dashboard.
 
-1. **Fork the Public Repository**: **Fork** this repo into your own GitHub account.
-2. **Implement Your Solution** in the forked repository. Make sure you're README file has:
-   - Steps to set up the database (migrations, environment variables).
-   - How to run the backend.
-   - How to run the frontend.
-   - Any relevant notes on testing.
-   - Salary Expectations per month (Mandatory)
-3. **Short Video Demo**: Provide a link (in a `.md` file in your forked repo) to a brief screen recording showing:
-   - Registering a user
-   - Logging in
-   - Creating, updating, and deleting tasks
-4. **Deadline**: Submissions are due **Sunday, Feb 23th 11:59 pm PST**.
+_Manage tasks:_
+  * Create a task: Fill in the form on the dashboard to add a new task.
+  * Edit a task: Click the "Edit" button to update a task's details or mark it as complete.
+  * Delete a task: Click the "Delete" button to remove a task.
 
-> **Note**: Please keep your solution minimal. The entire project is intended to be completed in around 3 hours. Focus on core features (registration, login, tasks CRUD) rather than polished UI or extra features.
+Notes
+- The application uses bcrypt for password hashing and Passport.js for authentication.
+- Tasks are linked to users via the user_id foreign key in the tasks table.
+- The frontend is minimal and uses EJS for server-side rendering and Skeleton CSS for styling.
 
----
+**Video Demo:**
+https://drive.google.com/file/d/1ItlyAlhWgrVbyMn8WE-fZr7Aw051_-1q/view?usp=drive_link
 
-## Evaluation Criteria
+**Salary Expectations:**
+My salary expectation for this role is $20/hr to $25/hr.
 
-1. **Functionality**  
-   - Does registration and login work correctly (with password hashing)?
-   - Are tasks protected by authentication?
-   - Does the tasks CRUD flow work end-to-end?
 
-2. **Code Quality**  
-   - Is the code structured logically and typed in TypeScript?
-   - Are variable/function names descriptive?
-
-3. **Clarity**  
-   - Is the `README.md` (in your fork) clear and detailed about setup steps?
-   - Easy to run and test?
-
-4. **Maintainability**  
-   - Organized logic (controllers/services, etc.)
-   - Minimal hard-coded values
-
-Good luck, and we look forward to your submission!
