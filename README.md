@@ -33,7 +33,7 @@ node_login/
 ├── package.json         # Node.js dependencies
 ├── README.md            # Project documentation
 
-**Setup Instructions**
+# **Setup Instructions**
 Prerequisites
   1. Node.js (v14 or higher)
   2. PostgreSQL (v12 or higher)
@@ -79,7 +79,7 @@ Replace your_db_username, your_db_password with your actual values.
     **npm run dev**
   The application will be running at http://localhost:4000
 
-**Usage**
+# **Usage**
 
 _Register a new user:_
   * Navigate to http://localhost:4000/users/register and fill in the form to create a new account.
@@ -97,10 +97,10 @@ Notes
 - Tasks are linked to users via the user_id foreign key in the tasks table.
 - The frontend is minimal and uses EJS for server-side rendering and Skeleton CSS for styling.
 
-**Video Demo:**
+# **Video Demo:**
 https://drive.google.com/file/d/1ItlyAlhWgrVbyMn8WE-fZr7Aw051_-1q/view?usp=drive_link
 
-**Salary Expectations:**
+# **Salary Expectations:**
 My salary expectation for this role is $20/hr to $25/hr.
 
 
